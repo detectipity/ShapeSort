@@ -13,11 +13,14 @@ const shapeH = 30;
 const originW = 15;
 const originH = 15;
 
+const blockW = 32;
+const blockH = 44;
+
 let prevX = 0;
 let prevY = 0;
 
 const canvasW = 320;
-const canvasH = 640;
+const canvasH = 600;
 
 let arrayShape;
 let numKinds = 10;
@@ -352,7 +355,7 @@ function drawShapes() {
     for(let i = 0; i < numDivs; i++) {
         for(let j = 0; j < divs[i].list.length; j++) {
             let kind = divs[i].list[j];
-            drawIcon(layerShape, j * 32 + 10, i * 48 + 10, kind - 1)
+            drawIcon(layerShape, j * blockW + 10, i * blockH + 10, kind - 1)
         }
     }
 }
@@ -369,7 +372,7 @@ function drawBottle() {
             layerMove.fillStyle = "rgb(240, 240, 240)"
         }
         layerMove.beginPath();
-        layerMove.fillRect(7, i * 48 + 7, 32 * divCapacity + 5, 35);
+        layerMove.fillRect(7, i * blockH + 7, blockW * divCapacity + 5, 35);
     }
 }
 

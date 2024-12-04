@@ -16,13 +16,13 @@ const originH = 15;
 let prevX = 0;
 let prevY = 0;
 
-const canvasW = 480;
+const canvasW = 320;
 const canvasH = 640;
 
 let arrayShape;
-let numKinds = 8;
+let numKinds = 10;
 let numDivs = numKinds + 2;
-let divCapacity = 6;
+let divCapacity = 9;
 
 let divs;
 let moveHistory = [];
@@ -84,6 +84,8 @@ class Div {
             this.numLayer = 0;
             this.kindTop = 0;
         }
+        
+        this.isSorted = false;
     }
     
     get numOut() {
@@ -244,6 +246,9 @@ function moveStart(mx, my){
         
         drawBottle()
     }
+    else {
+        reverse()
+    }
 }
 
 function moving(mx, my){
@@ -307,16 +312,29 @@ function drawIcon(layer, posX, posY, iconNumber) {
 }
 
 function operate(iFrom, iTo) {
-    //console.log(move)
-    
     let numMove = Math.min(divs[iFrom].numOut, divs[iTo].numIn)
     
     divs[iTo].add(divs[iFrom].kindTop, numMove)
     divs[iFrom].remove(numMove)
     
-    drawShapes()
-    
     moveHistory.push(new Move(iFrom, iTo, numMove))
+    
+    drawShapes()
+}
+
+function reverse() {
+    let i = moveHistory.length
+    
+    if(i > 0) {
+        let move = moveHistory[i - 1]
+        moveHistory.pop()
+        
+        divs[move.iFrom].add(divs[move.iTo].kindTop, move.num)
+        divs[move.iTo].remove(move.num)
+        
+        drawShapes()
+        drawBottle()
+    }
 }
 
 function shuffle(array) {
@@ -349,6 +367,7 @@ function drawBottle() {
             layerMove.fillStyle = "rgb(240, 240, 240)"
         }
         layerMove.beginPath();
-        layerMove.fillRect(7, i * 48 + 7, 32 * divCapacity + 20, 35);
+        layerMove.fillRect(7, i * 48 + 7, 32 * divCapacity + 5, 35);
     }
 }
+

@@ -165,6 +165,8 @@ function makeCanvas() {
 }
 
 function setEventListener() {
+    document.addEventListener("dblclick", function(e){ e.preventDefault();}, { passive: false });
+    
     if (
         (navigator.userAgent.indexOf("iPhone") > 0
          || navigator.userAgent.indexOf("iPod") > 0

@@ -14,13 +14,13 @@ const originW = 15;
 const originH = 15;
 
 const blockW = 32;
-const blockH = 44;
+const blockH = 42;
 
 let prevX = 0;
 let prevY = 0;
 
 const canvasW = 320;
-const canvasH = 600;
+const canvasH = 540;
 
 let arrayShape;
 let numKinds = 10;

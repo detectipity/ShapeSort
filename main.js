@@ -20,7 +20,7 @@ let prevX = 0;
 let prevY = 0;
 
 const canvasW = 320;
-const canvasH = 540;
+const canvasH = 600;
 
 let arrayShape;
 let numKinds = 10;

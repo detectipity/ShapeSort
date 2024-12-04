@@ -20,7 +20,7 @@ let prevX = 0;
 let prevY = 0;
 
 const canvasW = 320;
-const canvasH = 600;
+const canvasH = 560;
 
 let arrayShape;
 let numKinds = 10;
@@ -231,7 +231,7 @@ function initCanvas(){
 
 function moveStart(mx, my){
     //let ax = Math.floor(mx / blockW);
-    let ay = Math.floor((my - 5) / 48);
+    let ay = Math.floor((my - 5) / blockH);
     
     if(ay >= 0 && ay < numDivs) {
         if(selectedDiv == ay) {

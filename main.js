@@ -367,9 +367,9 @@ function reverse() {
         
         drawShapes()
         drawBottle()
+        
+        penalty += 1
     }
-    
-    penalty += 1
 }
 
 function shuffle(array) {
@@ -431,7 +431,7 @@ function nextPuzzle(){
         if(isCleared) {
             if(penalty == 0) {
                 if(Math.random() > 0.33) {
-                    numKinds = Math.min(10, numKinds += 4)
+                    numKinds = Math.min(10, numKinds += 3)
                 }
                 else if(Math.random() > 0.5) {
                     numKinds = Math.min(10, numKinds += 2)
@@ -443,7 +443,7 @@ function nextPuzzle(){
             }
             else if(penalty <= 30) {
                 if(Math.random() > 0.5) {
-                    numKinds = Math.min(10, numKinds += 3)
+                    numKinds = Math.min(10, numKinds += 2)
                 }
                 else {
                     numKinds = Math.min(10, numKinds += 1)
@@ -452,7 +452,7 @@ function nextPuzzle(){
             }
             else {
                 if(Math.random() > 0.5) {
-                    numKinds = Math.min(10, numKinds += 2)
+                    numKinds = Math.min(10, numKinds += 1)
                 }
                 else {
                     divCapacity = Math.min(9, divCapacity += 1)
@@ -461,7 +461,7 @@ function nextPuzzle(){
         }
         else {
             if(Math.random() > 0.5) {
-                numKinds = Math.max(4, numKinds -= 2)
+                numKinds = Math.max(4, numKinds -= 1)
             }
             else {
                 divCapacity = Math.min(4, divCapacity -= 1)

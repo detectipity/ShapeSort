@@ -13,19 +13,19 @@ const shapeH = 30;
 const originW = 15;
 const originH = 15;
 
-const blockW = 32;
+const blockW = 34;
 const blockH = 42;
 
 let prevX = 0;
 let prevY = 0;
 
-const canvasW = 320;
+const canvasW = 360;
 const canvasH = 560;
 
 let arrayShape;
 let numKinds = 10;
 let numDivs = numKinds + 2;
-let divCapacity = 9;
+let divCapacity = 6;
 
 let divs;
 let moveHistory = [];

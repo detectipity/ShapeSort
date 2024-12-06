@@ -16,21 +16,20 @@ const originH = 15;
 const blockW = 34;
 const blockH = 42;
 
-let prevX = 0;
-let prevY = 0;
-
 const canvasW = 360;
-const canvasH = 560;
+const canvasH = 520;
 
-let arrayShape;
-let numKinds = 10;
+let numKinds = 6;
 let numDivs = numKinds + 2;
-let divCapacity = 6;
+let divCapacity = 4;
 
 let divs;
+let initialList;
 let moveHistory = [];
 
 let selectedDiv = -1
+let isCleared = false
+let penalty = 0
 
 class Move {
     iFrom;
@@ -191,19 +190,25 @@ function setEventListener() {
 }
 
 function initArray(){
-    divs = [];
-    
     let order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     shuffle(order)
     
-    let array = [];
+    initialList = [];
     for(let i = 0; i < numKinds; i++) {
         for(let j = 0; j < divCapacity; j++) {
-            array.push(order[i]);
+            initialList.push(order[i]);
         }
     }
     
-    shuffle(array)
+    shuffle(initialList)
+    reset()
+}
+
+function reset() {
+    divs = [];
+    moveHistory = [];
+    selectedDiv = -1
+    isCleared = false
     
     for(let i = 0; i < numDivs; i++) {
         divs.push(new Div());
@@ -211,7 +216,7 @@ function initArray(){
     
     for(let i = 0; i < numKinds; i++) {
         for(let j = 0; j < divCapacity; j++) {
-            divs[i].add(array[i * divCapacity + j], 1);
+            divs[i].add(initialList[i * divCapacity + j], 1);
         }
     }
     
@@ -230,6 +235,10 @@ function initCanvas(){
 }
 
 function moveStart(mx, my){
+    if(isCleared) {
+        return
+    }
+    
     //let ax = Math.floor(mx / blockW);
     let ay = Math.floor((my - 5) / blockH);
     
@@ -325,9 +334,28 @@ function operate(iFrom, iTo) {
     moveHistory.push(new Move(iFrom, iTo, numMove))
     
     drawShapes()
+    
+    let count = 0
+    for(i = 0; i < numDivs; i++) {
+        if(divs[i].isSorted) {
+            count += 1
+        }
+    }
+    
+    if(count == numKinds) {
+        isCleared = true
+        layerShape.fillStyle = "black";
+        layerShape.font = "50px sans-serif";
+        layerShape.textAlign = "center";
+        layerShape.fillText("クリア", canvasW / 2, canvasH / 2);
+    }
 }
 
 function reverse() {
+    if(isCleared) {
+        return
+    }
+    
     let i = moveHistory.length
     
     if(i > 0) {
@@ -340,6 +368,8 @@ function reverse() {
         drawShapes()
         drawBottle()
     }
+    
+    penalty += 1
 }
 
 function shuffle(array) {
@@ -376,3 +406,70 @@ function drawBottle() {
     }
 }
 
+function resetPuzzle(){
+    if(isCleared) {
+        return
+    }
+    
+    let check = confirm("はじめからに戻してよいですか？");
+    if(check == true){
+        reset()
+        
+        penalty += 10
+    }
+}
+
+function nextPuzzle(){
+    let check = false
+    if(isCleared) {
+        check = true
+    }
+    else {
+        check = confirm("別の問題に変えてよいですか？");
+    }
+    if(check == true){
+        if(isCleared) {
+            if(penalty == 0) {
+                if(Math.random() > 0.33) {
+                    numKinds = Math.min(10, numKinds += 4)
+                }
+                else if(Math.random() > 0.5) {
+                    numKinds = Math.min(10, numKinds += 2)
+                    divCapacity = Math.min(9, divCapacity += 1)
+                }
+                else {
+                    divCapacity = Math.min(9, divCapacity += 2)
+                }
+            }
+            else if(penalty <= 30) {
+                if(Math.random() > 0.5) {
+                    numKinds = Math.min(10, numKinds += 3)
+                }
+                else {
+                    numKinds = Math.min(10, numKinds += 1)
+                    divCapacity = Math.min(9, divCapacity += 1)
+                }
+            }
+            else {
+                if(Math.random() > 0.5) {
+                    numKinds = Math.min(10, numKinds += 2)
+                }
+                else {
+                    divCapacity = Math.min(9, divCapacity += 1)
+                }
+            }
+        }
+        else {
+            if(Math.random() > 0.5) {
+                numKinds = Math.max(4, numKinds -= 2)
+            }
+            else {
+                divCapacity = Math.min(4, divCapacity -= 1)
+            }
+        }
+        numDivs = numKinds + 2
+        initArray()
+        
+        penalty = 0
+    }
+}

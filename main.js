@@ -391,6 +391,8 @@ function drawShapes() {
 }
 
 function drawBottle() {
+    layerMove.clearRect(0, 0, canvasW, canvasH);
+    
     for(let i = 0; i < numDivs; i++) {
         if(divs[i].isSorted) {
             layerMove.fillStyle = "rgb(240, 240, 0)"
@@ -428,45 +430,35 @@ function nextPuzzle(){
         check = confirm("別の問題に変えてよいですか？");
     }
     if(check == true){
+        let sum = numKinds + divCapacity
         if(isCleared) {
             if(penalty == 0) {
-                if(Math.random() > 0.33) {
-                    numKinds = Math.min(10, numKinds += 3)
-                }
-                else if(Math.random() > 0.5) {
-                    numKinds = Math.min(10, numKinds += 2)
-                    divCapacity = Math.min(9, divCapacity += 1)
-                }
-                else {
-                    divCapacity = Math.min(9, divCapacity += 2)
-                }
+                sum += 3
             }
             else if(penalty <= 30) {
-                if(Math.random() > 0.5) {
-                    numKinds = Math.min(10, numKinds += 2)
-                }
-                else {
-                    numKinds = Math.min(10, numKinds += 1)
-                    divCapacity = Math.min(9, divCapacity += 1)
-                }
+                sum += 2
             }
             else {
-                if(Math.random() > 0.5) {
-                    numKinds = Math.min(10, numKinds += 1)
-                }
-                else {
-                    divCapacity = Math.min(9, divCapacity += 1)
-                }
+                sum += 1
             }
         }
         else {
-            if(Math.random() > 0.5) {
-                numKinds = Math.max(4, numKinds -= 1)
-            }
-            else {
-                divCapacity = Math.min(4, divCapacity -= 1)
-            }
+            sum -= 1
         }
+        
+        if(sum < 8) {
+            sum = 8
+        }
+        if(sum > 19) {
+            sum = 19
+        }
+        
+        let rMin = Math.max(4, sum - 10)
+        let rMax = Math.floor(sum / 2)
+        let r = rMin + Math.floor(Math.random() * (rMax - rMin + 1))
+        
+        divCapacity = r
+        numKinds = sum - r
         numDivs = numKinds + 2
         initArray()
         
